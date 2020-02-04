@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+<head>
+
+  <!-- Webpage Title -->
+  <title>과제3</title>
+
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+  <!-- JS -->   
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  <script type="text/javascript">
+    function isCellPhone(p) {
+      var regExp = /^(01[016789]{1}|02|0[3-9]{1}[0-9]{1})[-][0-9]{3,4}[-][0-9]{4}$/;
+      return regExp.test(p);
+    }
+
+    function order() {
+      let name = $('#order_name').val();
+      let count = $('#order_count').val();
+      let address = $('#order_address').val();
+      let phone = $('#order_phone').val();
+
+      if (name == ''){
+        alert('이름을 입력해주세요')
+        $('#order_name').focus()
+        return
+      } else if (count == ''){
+        alert('수량을 입력해주세요')
+        $('#order_count').focus()
+        return
+      } else if (address == ''){
+        alert('주소를 입력해주세요')
+        $('#order_address').focus()
+        return
+      } else if (phone == ''){
+        alert('휴대폰번호를 입력해주세요')
+        $('#order_phone').focus()
+        return
+      } else if (!isCellPhone(phone)) {
+        alert('휴대폰번호 입력 형식이 틀립니다. \n 010-0000-0000으로 입력해주세요')
+        return
+      }
+
+     }
+
+    
+
+      
+
+      $(document).ready(function(){
+        $('#orders-box').html('');
+        listing();
+      });
+
+      function listing() {
+        $.ajax({
+          type: "GET",
+          url: "http://spartacodingclub.shop/order",
+          data: {},
+          success: function(response){
+             if (response['result'] == 'success') {
+               let orders = response['orders'];
+               console.log(orders);
+               for (let i = 0; i < orders.length; i++) {
+                 make_card(orders[i]['name'],orders[i]['count'],orders[i]['address'],orders[i]['phone'])
+               }
+             } else {
+               alert('기사를 받아오지 못했습니다');
+             }
+          }
+        })
+      }
+
+      function make_card(name,count,address,phone) {
+        let temp_html = '<tr>\
+            <td>'+name+'</td>\
+            <td>'+count+'</td>\
+            <td>'+address+'</td>\
+            <td>'+phone+'</td>\
+          </tr>';
+        $('#orders-box').append(temp_html);
+      }
+    
+
+   
+  </script>
+  <!-- 구글폰트 -->
+  <link href="https://fonts.googleapis.com/css?family=Stylish&display=swap" rel="stylesheet">
+
+  <!-- style -->
+  <style type="text/css">
+    * {
+      font-family: 'Noto Serif KR', serif;
+    }
+    
+    
+    .wrap {
+      width: 500px;
+      margin: auto;
+    }
+    .comment {
+      color: blue;
+      font-weight: bold;
+    }
+    .info {
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+    .uer-info {
+      margin: 20px 5px auto 5px;
+    }
+    h1, h5 {
+      display: inline;
+    }
+    .order {
+      margin-top: 20px;
+      text-align: center;
+    }
+    .orders {
+      margin-top:100px;
+    }
+     </style>
+
+</head>
+<body>
+  <div class="wrap">
+   <div class="card">
+    <img class="card-img-top" src="http://image.yes24.com/Goods/85110593/800x0" alt="결정적 순간들" border="0"> 
+    <div class="info">
+      <h1>결정적 순간들</h1>
+      <h5>판매가:1,8000원</h5>
+      <p class="card-text">파격과 흥미의 리더십 현장 보고서
+      -‘먼 나라 이웃나라’ 이원복, ‘닥터 헬기’ 이국종 교수가 열독한 책</p>
+    </div>
+  </div>
+  <div class="info">
+
+
+
+       <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text">주문자 이름</span>
+        </div>
+        <input type="text" class="form-control" id="order_name" aria-describedby="basic-addon3">
+      
+      </div>
+
+    
+    
+ 
+     <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <label class="input-group-text" for="inputGroupSelect01">수량</label>
+        <select class="custom-select" id="order_count">
+          <option selected value>--수량을 선택하세요--</option>
+          <option value="1">1권</option>
+          <option value="2">2권</option>
+          <option value="3">3권</option>
+        </select>
+     
+      </div>
+    </div>
+
+
+  
+   <div class="input-group mb-3">
+    <div class="input-group-prepend">
+      <span class="input-group-text">주소</span>
+    </div>
+    <input type="text" class="form-control" id="order_address" aria-describedby="basic-addon3">
+   
+  </div>
+
+
+
+ <div class="input-group">
+  <div class="input-group-prepend">
+    <span class="input-group-text">전화번호</span>
+  </div>
+  <input type="text" class="form-control" id="order_phone" aria-describedby="basic-addon3">
+  
+</div>
+
+<div class="order">
+  <button onclick="order()" type="button" class="btn btn-primary">주문하기</button>
+</div>
+
+
+</div>
+<div class="orders">
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">이름</th>
+      <th scope="col">수량</th>
+      <th scope="col">주소</th>
+      <th scope="col">전화번호</th>
+
+    </tr>
+  </thead>
+  <tbody id="orders-box">
+    
+  </tbody>
+</table>
+</div>
+
+</div>
+</body>
+</html>
